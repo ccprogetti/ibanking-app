@@ -11,10 +11,10 @@ application {
    authenticationType oauth2
    databaseType sql
    prodDatabaseType postgresql
-   serviceDiscoveryType no
+   serviceDiscoveryType consul
 }
+entities Conto, Bonifico
 
-    entities *
 }
 
 application {
@@ -25,7 +25,7 @@ application {
     authenticationType oauth2
     prodDatabaseType postgresql
     serverPort 8081
-    serviceDiscoveryType no
+    serviceDiscoveryType consul
   }
   entities Conto
 }
@@ -37,8 +37,8 @@ application {
     applicationType microservice
     authenticationType oauth2
     prodDatabaseType postgresql
-    serverPort 8081
-    serviceDiscoveryType no
+    serverPort 8082
+    serviceDiscoveryType consul
   }
   entities Bonifico
 }
@@ -55,3 +55,7 @@ entity Conto {
   nome String required
   iban String minlength(6)
 }
+
+
+microservice Bonifico with bonifici
+microservice Conto  with conti
