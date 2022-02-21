@@ -1,0 +1,57 @@
+/**
+ * The application configuration.
+ * @author A true hipster
+ */
+application {
+  config {
+   baseName gateway
+   clientFramework  react
+   applicationType gateway
+   packageName it.addvalue.ibanking.gateway
+   authenticationType oauth2
+   databaseType sql
+   prodDatabaseType postgresql
+   serviceDiscoveryType no
+}
+
+    entities *
+}
+
+application {
+  config {
+    baseName conti
+    packageName it.addvalue.ibanking.conti
+    applicationType microservice
+    authenticationType oauth2
+    prodDatabaseType postgresql
+    serverPort 8081
+    serviceDiscoveryType no
+  }
+  entities Conto
+}
+
+application {
+  config {
+    baseName bonifici
+    packageName it.addvalue.ibanking.bonifici
+    applicationType microservice
+    authenticationType oauth2
+    prodDatabaseType postgresql
+    serverPort 8081
+    serviceDiscoveryType no
+  }
+  entities Bonifico
+}
+
+entity Bonifico {
+  causale String required minlength(5)
+  destinatario String required minlength(10)
+  importo BigDecimal
+  dataEsecuzione LocalDate
+  ibanDestinatario String
+}
+
+entity Conto {
+  nome String required
+  iban String minlength(6)
+}
