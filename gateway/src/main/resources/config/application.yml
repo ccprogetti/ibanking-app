@@ -102,6 +102,14 @@ spring:
   application:
     name: gateway
   cloud:
+    consul:
+      discovery:
+        healthCheckPath: /management/health
+        instanceId: gateway:${spring.application.instance-id:${random.value}}
+        service-name: gateway
+      config:
+        watch:
+          enabled: false
     gateway:
       default-filters:
         - TokenRelay

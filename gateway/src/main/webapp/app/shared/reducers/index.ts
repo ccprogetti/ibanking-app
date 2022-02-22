@@ -7,9 +7,9 @@ import applicationProfile from './application-profile';
 import administration from 'app/modules/administration/administration.reducer';
 import userManagement from './user-management';
 // prettier-ignore
-import bonifico from 'app/entities/bonifico/bonifico.reducer';
+import conto from 'app/entities/conti/conto/conto.reducer';
 // prettier-ignore
-import conto from 'app/entities/conto/conto.reducer';
+import bonifico from 'app/entities/bonifici/bonifico/bonifico.reducer';
 /* jhipster-needle-add-reducer-import - JHipster will add reducer here */
 
 const rootReducer = {
@@ -18,8 +18,8 @@ const rootReducer = {
   applicationProfile,
   administration,
   userManagement,
-  bonifico,
   conto,
+  bonifico,
   /* jhipster-needle-add-reducer-combine - JHipster will add reducer here */
   loadingBar,
 };

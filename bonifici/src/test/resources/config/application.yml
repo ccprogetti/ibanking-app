@@ -19,6 +19,14 @@ spring:
     #active: testcontainers
   application:
     name: bonifici
+  cloud:
+    consul:
+      discovery:
+        enabled: false
+        instanceId: ${spring.application.name}:${spring.application.instance-id:${random.value}}
+      config:
+        enabled: false
+      enabled: false
   datasource:
     type: com.zaxxer.hikari.HikariDataSource
     url: jdbc:h2:mem:bonifici;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE

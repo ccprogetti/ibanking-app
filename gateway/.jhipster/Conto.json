@@ -1,6 +1,7 @@
 {
   "applications": ["gateway", "conti"],
-  "changelogDate": "20220221164207",
+  "changelogDate": "20220221171550",
+  "clientRootFolder": "conti",
   "databaseType": "sql",
   "dto": "no",
   "embedded": false,
@@ -20,6 +21,7 @@
   ],
   "fluentMethods": true,
   "jpaMetamodelFiltering": false,
+  "microserviceName": "conti",
   "name": "Conto",
   "pagination": "no",
   "readOnly": false,

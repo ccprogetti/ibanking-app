@@ -30,6 +30,22 @@ spring:
   jackson:
     serialization:
       indent-output: true
+  cloud:
+    consul:
+      config:
+        fail-fast: false # if not in "prod" profile, do not force to use Spring Cloud Config
+        format: yaml
+        profile-separator: '-'
+      discovery:
+        prefer-ip-address: true
+        tags:
+          - profile=${spring.profiles.active}
+          - version=#project.version#
+          - git-version=${git.commit.id.describe:}
+          - git-commit=${git.commit.id.abbrev:}
+          - git-branch=${git.branch:}
+      host: localhost
+      port: 8500
   datasource:
     type: com.zaxxer.hikari.HikariDataSource
     url: jdbc:h2:file:./target/h2db/db/bonifici;DB_CLOSE_DELAY=-1
@@ -62,7 +78,7 @@ spring:
         enabled: true
 
 server:
-  port: 8081
+  port: 8082
 
 # ===================================================================
 # JHipster specific properties

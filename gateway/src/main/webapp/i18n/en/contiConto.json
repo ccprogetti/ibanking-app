@@ -1,0 +1,29 @@
+{
+  "gatewayApp": {
+    "contiConto": {
+      "home": {
+        "title": "Contos",
+        "refreshListLabel": "Refresh list",
+        "createLabel": "Create a new Conto",
+        "createOrEditLabel": "Create or edit a Conto",
+        "notFound": "No Contos found"
+      },
+      "delete": {
+        "question": "Are you sure you want to delete Conto {{ id }}?"
+      },
+      "detail": {
+        "title": "Conto"
+      },
+      "id": "ID",
+      "nome": "Nome",
+      "iban": "Iban"
+    }
+  },
+  "contiApp": {
+    "contiConto": {
+      "created": "A new Conto is created with identifier {{ param }}",
+      "updated": "A Conto is updated with identifier {{ param }}",
+      "deleted": "A Conto is deleted with identifier {{ param }}"
+    }
+  }
+}

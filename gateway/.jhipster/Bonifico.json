@@ -1,6 +1,7 @@
 {
   "applications": ["gateway", "bonifici"],
-  "changelogDate": "20220221164107",
+  "changelogDate": "20220221171550",
+  "clientRootFolder": "bonifici",
   "databaseType": "sql",
   "dto": "no",
   "embedded": false,
@@ -33,6 +34,7 @@
   ],
   "fluentMethods": true,
   "jpaMetamodelFiltering": false,
+  "microserviceName": "bonifici",
   "name": "Bonifico",
   "pagination": "no",
   "readOnly": false,

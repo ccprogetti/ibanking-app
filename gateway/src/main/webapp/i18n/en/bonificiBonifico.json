@@ -1,0 +1,32 @@
+{
+  "gatewayApp": {
+    "bonificiBonifico": {
+      "home": {
+        "title": "Bonificos",
+        "refreshListLabel": "Refresh list",
+        "createLabel": "Create a new Bonifico",
+        "createOrEditLabel": "Create or edit a Bonifico",
+        "notFound": "No Bonificos found"
+      },
+      "delete": {
+        "question": "Are you sure you want to delete Bonifico {{ id }}?"
+      },
+      "detail": {
+        "title": "Bonifico"
+      },
+      "id": "ID",
+      "causale": "Causale",
+      "destinatario": "Destinatario",
+      "importo": "Importo",
+      "dataEsecuzione": "Data Esecuzione",
+      "ibanDestinatario": "Iban Destinatario"
+    }
+  },
+  "bonificiApp": {
+    "bonificiBonifico": {
+      "created": "A new Bonifico is created with identifier {{ param }}",
+      "updated": "A Bonifico is updated with identifier {{ param }}",
+      "deleted": "A Bonifico is deleted with identifier {{ param }}"
+    }
+  }
+}

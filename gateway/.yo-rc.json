@@ -2,6 +2,16 @@
   "generator-jhipster": {
     "applicationIndex": 0,
     "applicationType": "gateway",
+    "applications": {
+      "bonifici": {
+        "applicationIndex": 2,
+        "serverPort": "8082"
+      },
+      "conti": {
+        "applicationIndex": 1,
+        "serverPort": "8081"
+      }
+    },
     "authenticationType": "oauth2",
     "baseName": "gateway",
     "blueprints": [],
@@ -11,7 +21,7 @@
     "clientPackageManager": "npm",
     "clientTheme": "none",
     "clientThemeVariant": "",
-    "creationTimestamp": 1645461607418,
+    "creationTimestamp": 1645463691433,
     "databaseType": "sql",
     "devDatabaseType": "h2Disk",
     "devServerPort": 9060,
@@ -20,14 +30,13 @@
     "enableHibernateCache": false,
     "enableSwaggerCodegen": false,
     "enableTranslation": true,
-    "entities": ["Bonifico", "Conto"],
+    "entities": ["Conto", "Bonifico"],
     "entitySuffix": "",
     "gradleEnterpriseHost": "",
     "jhiPrefix": "jhi",
     "jhipsterVersion": "7.6.0",
-    "jwtSecretKey": "YWMxOTgxYWZhYjA4ZTc2NjI2NDMwODgxMmRiNmQ5YTc5ZWExNjgxYzBjZTBlYjFkODdhOTNiNGMxZmExYmY0ODVjODgwZmIxMGFhODJjMGRhMTBlNTY0MGQyMmI0MDI3YjJiYTQwMmQ2NTQ0ODc3NWM2Y2JjYjZmN2NkNDQyMTg=",
+    "jwtSecretKey": "Y2MxYTAxMTlkYmM5NDY1MDRjMDMxZTA2MDY0YmE2OGVhNDgxMTBlMTFmYjA3ZjZjZWRjZWEyYjkwYTZhZjFjOTc4NTJiYmU5OTkyM2VjYzEwOWNhZTY4YjJhOGU3MDA5NWVhNTYxZTk4ZTU2NTE5ZDMwZjY0NDllMTU4MWNlMWE=",
     "languages": ["en"],
-    "lastLiquibaseTimestamp": 1645461727000,
     "messageBroker": false,
     "monorepository": true,
     "nativeLanguage": "en",
@@ -39,7 +48,7 @@
     "reactive": true,
     "searchEngine": false,
     "serverPort": "8080",
-    "serviceDiscoveryType": false,
+    "serviceDiscoveryType": "consul",
     "skipCheckLengthOfIdentifier": false,
     "skipCommitHook": true,
     "skipFakeData": false,

@@ -11,6 +11,9 @@ import org.springframework.boot.info.BuildProperties;
 import org.springframework.boot.info.GitProperties;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.cache.interceptor.KeyGenerator;
+import org.springframework.cloud.client.ServiceInstance;
+import org.springframework.cloud.client.discovery.DiscoveryClient;
+import org.springframework.cloud.client.serviceregistry.Registration;
 import org.springframework.context.annotation.*;
 import tech.jhipster.config.JHipsterProperties;
 import tech.jhipster.config.cache.PrefixedKeyGenerator;
@@ -49,7 +52,6 @@ public class CacheConfiguration {
             createCache(cm, it.addvalue.ibanking.conti.domain.User.class.getName());
             createCache(cm, it.addvalue.ibanking.conti.domain.Authority.class.getName());
             createCache(cm, it.addvalue.ibanking.conti.domain.User.class.getName() + ".authorities");
-            createCache(cm, it.addvalue.ibanking.conti.domain.Conto.class.getName());
             // jhipster-needle-ehcache-add-entry
         };
     }

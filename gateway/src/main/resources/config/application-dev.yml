@@ -30,6 +30,22 @@ spring:
   jackson:
     serialization:
       indent-output: true
+  cloud:
+    consul:
+      config:
+        fail-fast: false # if not in "prod" profile, do not force to use Spring Cloud Config
+        format: yaml
+        profile-separator: '-'
+      discovery:
+        prefer-ip-address: true
+        tags:
+          - profile=${spring.profiles.active}
+          - version=#project.version#
+          - git-version=${git.commit.id.describe:}
+          - git-commit=${git.commit.id.abbrev:}
+          - git-branch=${git.branch:}
+      host: localhost
+      port: 8500
   h2:
     console:
       # disable spring boot built-in h2-console since we start it manually with correct configuration

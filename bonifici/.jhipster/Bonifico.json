@@ -1,6 +1,6 @@
 {
-  "applications": ["gateway", "bonifici"],
-  "changelogDate": "20220221164107",
+  "applications": ["bonifici"],
+  "changelogDate": "20220221171550",
   "clientRootFolder": "bonifici",
   "databaseType": "sql",
   "dto": "no",
