@@ -1,3 +1,8 @@
+ports:
+  - port: 7000-9999
+    onOpen: open-browser
+    visibility: public
+
 tasks:
   - init: |
       npm install -g generator-jhipster
