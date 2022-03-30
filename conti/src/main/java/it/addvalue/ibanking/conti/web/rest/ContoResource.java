@@ -2,6 +2,7 @@ package it.addvalue.ibanking.conti.web.rest;
 
 import it.addvalue.ibanking.conti.domain.Conto;
 import it.addvalue.ibanking.conti.repository.ContoRepository;
+import it.addvalue.ibanking.conti.security.SecurityUtils;
 import it.addvalue.ibanking.conti.service.ContoQueryService;
 import it.addvalue.ibanking.conti.service.ContoService;
 import it.addvalue.ibanking.conti.service.criteria.ContoCriteria;
@@ -153,6 +154,11 @@ public class ContoResource {
         @org.springdoc.api.annotations.ParameterObject Pageable pageable
     ) {
         log.debug("REST request to get Contos by criteria: {}", criteria);
+
+        String userName = SecurityUtils.getCurrentUserLogin().get();
+        log.debug("Filter for username: {}", userName);
+        criteria.userName().setEquals(userName);
+                
         Page<Conto> page = contoQueryService.findByCriteria(criteria, pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return ResponseEntity.ok().headers(headers).body(page.getContent());
