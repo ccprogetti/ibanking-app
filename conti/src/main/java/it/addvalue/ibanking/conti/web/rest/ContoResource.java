@@ -2,6 +2,7 @@ package it.addvalue.ibanking.conti.web.rest;
 
 import it.addvalue.ibanking.conti.domain.Conto;
 import it.addvalue.ibanking.conti.repository.ContoRepository;
+import it.addvalue.ibanking.conti.security.SecurityUtils;
 import it.addvalue.ibanking.conti.web.rest.errors.BadRequestAlertException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -129,6 +130,12 @@ public class ContoResource {
                 if (conto.getIban() != null) {
                     existingConto.setIban(conto.getIban());
                 }
+                if (conto.getUserName() != null) {
+                    existingConto.setUserName(conto.getUserName());
+                }
+                if (conto.getAbi() != null) {
+                    existingConto.setAbi(conto.getAbi());
+                }
 
                 return existingConto;
             })
@@ -148,6 +155,8 @@ public class ContoResource {
     @GetMapping("/contos")
     public List<Conto> getAllContos() {
         log.debug("REST request to get all Contos");
+        SecurityUtils.getCurrentUserLogin();
+
         return contoRepository.findAll();
     }
 
