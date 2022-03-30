@@ -1,5 +1,8 @@
 {
-  "applications": ["gateway", "conti"],
+  "applications": [
+    "gateway",
+    "conti"
+  ],
   "changelogDate": "20220330075431",
   "clientRootFolder": "conti",
   "databaseType": "sql",
@@ -10,23 +13,31 @@
     {
       "fieldName": "nome",
       "fieldType": "String",
-      "fieldValidateRules": ["required"]
+      "fieldValidateRules": [
+        "required"
+      ]
     },
     {
       "fieldName": "iban",
       "fieldType": "String",
-      "fieldValidateRules": ["minlength"],
+      "fieldValidateRules": [
+        "minlength"
+      ],
       "fieldValidateRulesMinlength": "6"
     },
     {
       "fieldName": "userName",
       "fieldType": "String",
-      "fieldValidateRules": ["required"]
+      "fieldValidateRules": [
+        "required"
+      ]
     },
     {
       "fieldName": "abi",
       "fieldType": "String",
-      "fieldValidateRules": ["required"]
+      "fieldValidateRules": [
+        "required"
+      ]
     }
   ],
   "fluentMethods": true,

@@ -30,6 +30,14 @@ public class Conto implements Serializable {
     @Column(name = "iban")
     private String iban;
 
+    @NotNull
+    @Column(name = "user_name", nullable = false)
+    private String userName;
+
+    @NotNull
+    @Column(name = "abi", nullable = false)
+    private String abi;
+
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
     public Long getId() {
@@ -71,6 +79,32 @@ public class Conto implements Serializable {
         this.iban = iban;
     }
 
+    public String getUserName() {
+        return this.userName;
+    }
+
+    public Conto userName(String userName) {
+        this.setUserName(userName);
+        return this;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    public String getAbi() {
+        return this.abi;
+    }
+
+    public Conto abi(String abi) {
+        this.setAbi(abi);
+        return this;
+    }
+
+    public void setAbi(String abi) {
+        this.abi = abi;
+    }
+
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
 
     @Override
@@ -97,6 +131,8 @@ public class Conto implements Serializable {
             "id=" + getId() +
             ", nome='" + getNome() + "'" +
             ", iban='" + getIban() + "'" +
+            ", userName='" + getUserName() + "'" +
+            ", abi='" + getAbi() + "'" +
             "}";
     }
 }

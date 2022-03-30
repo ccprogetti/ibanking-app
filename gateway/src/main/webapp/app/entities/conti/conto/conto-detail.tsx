@@ -41,6 +41,18 @@ export const ContoDetail = (props: RouteComponentProps<{ id: string }>) => {
             </span>
           </dt>
           <dd>{contoEntity.iban}</dd>
+          <dt>
+            <span id="userName">
+              <Translate contentKey="gatewayApp.contiConto.userName">User Name</Translate>
+            </span>
+          </dt>
+          <dd>{contoEntity.userName}</dd>
+          <dt>
+            <span id="abi">
+              <Translate contentKey="gatewayApp.contiConto.abi">Abi</Translate>
+            </span>
+          </dt>
+          <dd>{contoEntity.abi}</dd>
         </dl>
         <Button tag={Link} to="/conto" replace color="info" data-cy="entityDetailsBackButton">
           <FontAwesomeIcon icon="arrow-left" />{' '}

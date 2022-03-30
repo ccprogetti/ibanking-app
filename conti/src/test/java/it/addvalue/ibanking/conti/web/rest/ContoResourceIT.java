@@ -36,6 +36,12 @@ class ContoResourceIT {
     private static final String DEFAULT_IBAN = "AAAAAAAAAA";
     private static final String UPDATED_IBAN = "BBBBBBBBBB";
 
+    private static final String DEFAULT_USER_NAME = "AAAAAAAAAA";
+    private static final String UPDATED_USER_NAME = "BBBBBBBBBB";
+
+    private static final String DEFAULT_ABI = "AAAAAAAAAA";
+    private static final String UPDATED_ABI = "BBBBBBBBBB";
+
     private static final String ENTITY_API_URL = "/api/contos";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
 
@@ -60,7 +66,7 @@ class ContoResourceIT {
      * if they test an entity which requires the current entity.
      */
     public static Conto createEntity(EntityManager em) {
-        Conto conto = new Conto().nome(DEFAULT_NOME).iban(DEFAULT_IBAN);
+        Conto conto = new Conto().nome(DEFAULT_NOME).iban(DEFAULT_IBAN).userName(DEFAULT_USER_NAME).abi(DEFAULT_ABI);
         return conto;
     }
 
@@ -71,7 +77,7 @@ class ContoResourceIT {
      * if they test an entity which requires the current entity.
      */
     public static Conto createUpdatedEntity(EntityManager em) {
-        Conto conto = new Conto().nome(UPDATED_NOME).iban(UPDATED_IBAN);
+        Conto conto = new Conto().nome(UPDATED_NOME).iban(UPDATED_IBAN).userName(UPDATED_USER_NAME).abi(UPDATED_ABI);
         return conto;
     }
 
@@ -97,6 +103,8 @@ class ContoResourceIT {
         Conto testConto = contoList.get(contoList.size() - 1);
         assertThat(testConto.getNome()).isEqualTo(DEFAULT_NOME);
         assertThat(testConto.getIban()).isEqualTo(DEFAULT_IBAN);
+        assertThat(testConto.getUserName()).isEqualTo(DEFAULT_USER_NAME);
+        assertThat(testConto.getAbi()).isEqualTo(DEFAULT_ABI);
     }
 
     @Test
@@ -140,6 +148,44 @@ class ContoResourceIT {
 
     @Test
     @Transactional
+    void checkUserNameIsRequired() throws Exception {
+        int databaseSizeBeforeTest = contoRepository.findAll().size();
+        // set the field null
+        conto.setUserName(null);
+
+        // Create the Conto, which fails.
+
+        restContoMockMvc
+            .perform(
+                post(ENTITY_API_URL).with(csrf()).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(conto))
+            )
+            .andExpect(status().isBadRequest());
+
+        List<Conto> contoList = contoRepository.findAll();
+        assertThat(contoList).hasSize(databaseSizeBeforeTest);
+    }
+
+    @Test
+    @Transactional
+    void checkAbiIsRequired() throws Exception {
+        int databaseSizeBeforeTest = contoRepository.findAll().size();
+        // set the field null
+        conto.setAbi(null);
+
+        // Create the Conto, which fails.
+
+        restContoMockMvc
+            .perform(
+                post(ENTITY_API_URL).with(csrf()).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(conto))
+            )
+            .andExpect(status().isBadRequest());
+
+        List<Conto> contoList = contoRepository.findAll();
+        assertThat(contoList).hasSize(databaseSizeBeforeTest);
+    }
+
+    @Test
+    @Transactional
     void getAllContos() throws Exception {
         // Initialize the database
         contoRepository.saveAndFlush(conto);
@@ -151,7 +197,9 @@ class ContoResourceIT {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(conto.getId().intValue())))
             .andExpect(jsonPath("$.[*].nome").value(hasItem(DEFAULT_NOME)))
-            .andExpect(jsonPath("$.[*].iban").value(hasItem(DEFAULT_IBAN)));
+            .andExpect(jsonPath("$.[*].iban").value(hasItem(DEFAULT_IBAN)))
+            .andExpect(jsonPath("$.[*].userName").value(hasItem(DEFAULT_USER_NAME)))
+            .andExpect(jsonPath("$.[*].abi").value(hasItem(DEFAULT_ABI)));
     }
 
     @Test
@@ -167,7 +215,9 @@ class ContoResourceIT {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.id").value(conto.getId().intValue()))
             .andExpect(jsonPath("$.nome").value(DEFAULT_NOME))
-            .andExpect(jsonPath("$.iban").value(DEFAULT_IBAN));
+            .andExpect(jsonPath("$.iban").value(DEFAULT_IBAN))
+            .andExpect(jsonPath("$.userName").value(DEFAULT_USER_NAME))
+            .andExpect(jsonPath("$.abi").value(DEFAULT_ABI));
     }
 
     @Test
@@ -189,7 +239,7 @@ class ContoResourceIT {
         Conto updatedConto = contoRepository.findById(conto.getId()).get();
         // Disconnect from session so that the updates on updatedConto are not directly saved in db
         em.detach(updatedConto);
-        updatedConto.nome(UPDATED_NOME).iban(UPDATED_IBAN);
+        updatedConto.nome(UPDATED_NOME).iban(UPDATED_IBAN).userName(UPDATED_USER_NAME).abi(UPDATED_ABI);
 
         restContoMockMvc
             .perform(
@@ -206,6 +256,8 @@ class ContoResourceIT {
         Conto testConto = contoList.get(contoList.size() - 1);
         assertThat(testConto.getNome()).isEqualTo(UPDATED_NOME);
         assertThat(testConto.getIban()).isEqualTo(UPDATED_IBAN);
+        assertThat(testConto.getUserName()).isEqualTo(UPDATED_USER_NAME);
+        assertThat(testConto.getAbi()).isEqualTo(UPDATED_ABI);
     }
 
     @Test
@@ -280,7 +332,7 @@ class ContoResourceIT {
         Conto partialUpdatedConto = new Conto();
         partialUpdatedConto.setId(conto.getId());
 
-        partialUpdatedConto.nome(UPDATED_NOME);
+        partialUpdatedConto.nome(UPDATED_NOME).userName(UPDATED_USER_NAME).abi(UPDATED_ABI);
 
         restContoMockMvc
             .perform(
@@ -297,6 +349,8 @@ class ContoResourceIT {
         Conto testConto = contoList.get(contoList.size() - 1);
         assertThat(testConto.getNome()).isEqualTo(UPDATED_NOME);
         assertThat(testConto.getIban()).isEqualTo(DEFAULT_IBAN);
+        assertThat(testConto.getUserName()).isEqualTo(UPDATED_USER_NAME);
+        assertThat(testConto.getAbi()).isEqualTo(UPDATED_ABI);
     }
 
     @Test
@@ -311,7 +365,7 @@ class ContoResourceIT {
         Conto partialUpdatedConto = new Conto();
         partialUpdatedConto.setId(conto.getId());
 
-        partialUpdatedConto.nome(UPDATED_NOME).iban(UPDATED_IBAN);
+        partialUpdatedConto.nome(UPDATED_NOME).iban(UPDATED_IBAN).userName(UPDATED_USER_NAME).abi(UPDATED_ABI);
 
         restContoMockMvc
             .perform(
@@ -328,6 +382,8 @@ class ContoResourceIT {
         Conto testConto = contoList.get(contoList.size() - 1);
         assertThat(testConto.getNome()).isEqualTo(UPDATED_NOME);
         assertThat(testConto.getIban()).isEqualTo(UPDATED_IBAN);
+        assertThat(testConto.getUserName()).isEqualTo(UPDATED_USER_NAME);
+        assertThat(testConto.getAbi()).isEqualTo(UPDATED_ABI);
     }
 
     @Test

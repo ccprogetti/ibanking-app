@@ -55,6 +55,12 @@ export const Conto = (props: RouteComponentProps<{ url: string }>) => {
                 <th>
                   <Translate contentKey="gatewayApp.contiConto.iban">Iban</Translate>
                 </th>
+                <th>
+                  <Translate contentKey="gatewayApp.contiConto.userName">User Name</Translate>
+                </th>
+                <th>
+                  <Translate contentKey="gatewayApp.contiConto.abi">Abi</Translate>
+                </th>
                 <th />
               </tr>
             </thead>
@@ -68,6 +74,8 @@ export const Conto = (props: RouteComponentProps<{ url: string }>) => {
                   </td>
                   <td>{conto.nome}</td>
                   <td>{conto.iban}</td>
+                  <td>{conto.userName}</td>
+                  <td>{conto.abi}</td>
                   <td className="text-end">
                     <div className="btn-group flex-btn-group-container">
                       <Button tag={Link} to={`${match.url}/${conto.id}`} color="info" size="sm" data-cy="entityDetailsButton">

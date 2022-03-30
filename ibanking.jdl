@@ -54,6 +54,8 @@ entity Bonifico {
 entity Conto {
   nome String required
   iban String minlength(6)
+  userName String required
+  abi String required
 }
 
 

@@ -16,7 +16,9 @@
       },
       "id": "ID",
       "nome": "Nome",
-      "iban": "Iban"
+      "iban": "Iban",
+      "userName": "User Name",
+      "abi": "Abi"
     }
   },
   "contiApp": {

@@ -102,6 +102,26 @@ export const ContoUpdate = (props: RouteComponentProps<{ id: string }>) => {
                   minLength: { value: 6, message: translate('entity.validation.minlength', { min: 6 }) },
                 }}
               />
+              <ValidatedField
+                label={translate('gatewayApp.contiConto.userName')}
+                id="conto-userName"
+                name="userName"
+                data-cy="userName"
+                type="text"
+                validate={{
+                  required: { value: true, message: translate('entity.validation.required') },
+                }}
+              />
+              <ValidatedField
+                label={translate('gatewayApp.contiConto.abi')}
+                id="conto-abi"
+                name="abi"
+                data-cy="abi"
+                type="text"
+                validate={{
+                  required: { value: true, message: translate('entity.validation.required') },
+                }}
+              />
               <Button tag={Link} id="cancel-save" data-cy="entityCreateCancelButton" to="/conto" replace color="info">
                 <FontAwesomeIcon icon="arrow-left" />
                 &nbsp;
