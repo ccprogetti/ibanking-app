@@ -16,7 +16,7 @@ services:
       - SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_OIDC_CLIENT_SECRET=internal
       - JHIPSTER_SLEEP=30 # gives time for other services to boot before the application
   bonifici-postgresql:
-    image: postgres:14.1
+    image: postgres:14.2
     # volumes:
     #   - ~/volumes/jhipster/bonifici/postgresql/:/var/lib/postgresql/data/
     environment:
@@ -28,7 +28,7 @@ services:
     ports:
       - 127.0.0.1:5432:5432
   consul:
-    image: consul:1.11.1
+    image: consul:1.11.3
     # If you want to expose these ports outside your dev PC,
     # remove the "127.0.0.1:" prefix
     ports:

@@ -1,6 +1,6 @@
 {
   "applications": ["gateway", "conti"],
-  "changelogDate": "20220221171550",
+  "changelogDate": "20220330075431",
   "clientRootFolder": "conti",
   "databaseType": "sql",
   "dto": "no",

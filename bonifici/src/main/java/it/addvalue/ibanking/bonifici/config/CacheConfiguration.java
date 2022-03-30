@@ -52,6 +52,7 @@ public class CacheConfiguration {
             createCache(cm, it.addvalue.ibanking.bonifici.domain.User.class.getName());
             createCache(cm, it.addvalue.ibanking.bonifici.domain.Authority.class.getName());
             createCache(cm, it.addvalue.ibanking.bonifici.domain.User.class.getName() + ".authorities");
+            createCache(cm, it.addvalue.ibanking.bonifici.domain.Bonifico.class.getName());
             // jhipster-needle-ehcache-add-entry
         };
     }
