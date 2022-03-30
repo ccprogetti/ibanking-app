@@ -13,7 +13,7 @@ application {
    prodDatabaseType postgresql
    serviceDiscoveryType consul
 }
-entities Conto, Bonifico
+entities Conto
 
 }
 
@@ -30,27 +30,6 @@ application {
   entities Conto
 }
 
-application {
-  config {
-    baseName bonifici
-    packageName it.addvalue.ibanking.bonifici
-    applicationType microservice
-    authenticationType oauth2
-    prodDatabaseType postgresql
-    serverPort 8082
-    serviceDiscoveryType consul
-  }
-  entities Bonifico
-}
-
-entity Bonifico {
-  causale String required minlength(5)
-  destinatario String required minlength(10)
-  importo BigDecimal
-  dataEsecuzione LocalDate
-  ibanDestinatario String
-}
-
 entity Conto {
   nome String required
   iban String minlength(6)
@@ -59,5 +38,6 @@ entity Conto {
 }
 
 
-microservice Bonifico with bonifici
+paginate * with pagination
+
 microservice Conto  with conti
