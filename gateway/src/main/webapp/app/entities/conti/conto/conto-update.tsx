@@ -20,7 +20,7 @@ export const ContoUpdate = (props: RouteComponentProps<{ id: string }>) => {
   const updating = useAppSelector(state => state.conto.updating);
   const updateSuccess = useAppSelector(state => state.conto.updateSuccess);
   const handleClose = () => {
-    props.history.push('/conto');
+    props.history.push('/conto' + props.location.search);
   };
 
   useEffect(() => {

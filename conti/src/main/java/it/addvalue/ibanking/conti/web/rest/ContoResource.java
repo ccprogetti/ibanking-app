@@ -2,7 +2,9 @@ package it.addvalue.ibanking.conti.web.rest;
 
 import it.addvalue.ibanking.conti.domain.Conto;
 import it.addvalue.ibanking.conti.repository.ContoRepository;
-import it.addvalue.ibanking.conti.security.SecurityUtils;
+import it.addvalue.ibanking.conti.service.ContoQueryService;
+import it.addvalue.ibanking.conti.service.ContoService;
+import it.addvalue.ibanking.conti.service.criteria.ContoCriteria;
 import it.addvalue.ibanking.conti.web.rest.errors.BadRequestAlertException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -14,10 +16,14 @@ import javax.validation.constraints.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import tech.jhipster.web.util.HeaderUtil;
+import tech.jhipster.web.util.PaginationUtil;
 import tech.jhipster.web.util.ResponseUtil;
 
 /**
@@ -25,7 +31,6 @@ import tech.jhipster.web.util.ResponseUtil;
  */
 @RestController
 @RequestMapping("/api")
-@Transactional
 public class ContoResource {
 
     private final Logger log = LoggerFactory.getLogger(ContoResource.class);
@@ -35,10 +40,16 @@ public class ContoResource {
     @Value("${jhipster.clientApp.name}")
     private String applicationName;
 
+    private final ContoService contoService;
+
     private final ContoRepository contoRepository;
 
-    public ContoResource(ContoRepository contoRepository) {
+    private final ContoQueryService contoQueryService;
+
+    public ContoResource(ContoService contoService, ContoRepository contoRepository, ContoQueryService contoQueryService) {
+        this.contoService = contoService;
         this.contoRepository = contoRepository;
+        this.contoQueryService = contoQueryService;
     }
 
     /**
@@ -54,7 +65,7 @@ public class ContoResource {
         if (conto.getId() != null) {
             throw new BadRequestAlertException("A new conto cannot already have an ID", ENTITY_NAME, "idexists");
         }
-        Conto result = contoRepository.save(conto);
+        Conto result = contoService.save(conto);
         return ResponseEntity
             .created(new URI("/api/contos/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
@@ -86,7 +97,7 @@ public class ContoResource {
             throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
         }
 
-        Conto result = contoRepository.save(conto);
+        Conto result = contoService.save(conto);
         return ResponseEntity
             .ok()
             .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, conto.getId().toString()))
@@ -121,25 +132,7 @@ public class ContoResource {
             throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
         }
 
-        Optional<Conto> result = contoRepository
-            .findById(conto.getId())
-            .map(existingConto -> {
-                if (conto.getNome() != null) {
-                    existingConto.setNome(conto.getNome());
-                }
-                if (conto.getIban() != null) {
-                    existingConto.setIban(conto.getIban());
-                }
-                if (conto.getUserName() != null) {
-                    existingConto.setUserName(conto.getUserName());
-                }
-                if (conto.getAbi() != null) {
-                    existingConto.setAbi(conto.getAbi());
-                }
-
-                return existingConto;
-            })
-            .map(contoRepository::save);
+        Optional<Conto> result = contoService.partialUpdate(conto);
 
         return ResponseUtil.wrapOrNotFound(
             result,
@@ -150,14 +143,31 @@ public class ContoResource {
     /**
      * {@code GET  /contos} : get all the contos.
      *
+     * @param pageable the pagination information.
+     * @param criteria the criteria which the requested entities should match.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of contos in body.
      */
     @GetMapping("/contos")
-    public List<Conto> getAllContos() {
-        log.debug("REST request to get all Contos");
-        SecurityUtils.getCurrentUserLogin();
+    public ResponseEntity<List<Conto>> getAllContos(
+        ContoCriteria criteria,
+        @org.springdoc.api.annotations.ParameterObject Pageable pageable
+    ) {
+        log.debug("REST request to get Contos by criteria: {}", criteria);
+        Page<Conto> page = contoQueryService.findByCriteria(criteria, pageable);
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
+        return ResponseEntity.ok().headers(headers).body(page.getContent());
+    }
 
-        return contoRepository.findAll();
+    /**
+     * {@code GET  /contos/count} : count all the contos.
+     *
+     * @param criteria the criteria which the requested entities should match.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the count in body.
+     */
+    @GetMapping("/contos/count")
+    public ResponseEntity<Long> countContos(ContoCriteria criteria) {
+        log.debug("REST request to count Contos by criteria: {}", criteria);
+        return ResponseEntity.ok().body(contoQueryService.countByCriteria(criteria));
     }
 
     /**
@@ -169,7 +179,7 @@ public class ContoResource {
     @GetMapping("/contos/{id}")
     public ResponseEntity<Conto> getConto(@PathVariable Long id) {
         log.debug("REST request to get Conto : {}", id);
-        Optional<Conto> conto = contoRepository.findById(id);
+        Optional<Conto> conto = contoService.findOne(id);
         return ResponseUtil.wrapOrNotFound(conto);
     }
 
@@ -182,7 +192,7 @@ public class ContoResource {
     @DeleteMapping("/contos/{id}")
     public ResponseEntity<Void> deleteConto(@PathVariable Long id) {
         log.debug("REST request to delete Conto : {}", id);
-        contoRepository.deleteById(id);
+        contoService.delete(id);
         return ResponseEntity
             .noContent()
             .headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString()))

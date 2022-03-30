@@ -38,6 +38,8 @@ entity Conto {
 }
 
 
+filter * 
+
 paginate * with pagination
 
 microservice Conto  with conti

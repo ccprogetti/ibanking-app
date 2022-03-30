@@ -20,7 +20,7 @@ export const ContoDeleteDialog = (props: RouteComponentProps<{ id: string }>) =>
   const updateSuccess = useAppSelector(state => state.conto.updateSuccess);
 
   const handleClose = () => {
-    props.history.push('/conto');
+    props.history.push('/conto' + props.location.search);
   };
 
   useEffect(() => {
