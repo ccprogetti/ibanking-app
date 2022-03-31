@@ -21,6 +21,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import tech.jhipster.web.util.HeaderUtil;
@@ -171,8 +172,11 @@ public class ContoResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the count in body.
      */
     @GetMapping("/contos/count")
-    public ResponseEntity<Long> countContos(ContoCriteria criteria) {
+    public ResponseEntity<Long> countContos(ContoCriteria criteria, JwtAuthenticationToken token) {
         log.debug("REST request to count Contos by criteria: {}", criteria);
+
+        log.debug("REST request to count Contos with claim sid: {}", token.getToken().getClaimAsString("sid"));
+        
         return ResponseEntity.ok().body(contoQueryService.countByCriteria(criteria));
     }
 
