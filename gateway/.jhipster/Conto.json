@@ -2,7 +2,7 @@
   "applications": ["gateway", "conti"],
   "changelogDate": "20220330130147",
   "clientRootFolder": "conti",
-  "databaseType": "sql",
+  "databaseType": "no",
   "dto": "no",
   "embedded": false,
   "entityTableName": "conto",

@@ -9,10 +9,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 import org.springframework.core.annotation.Order;
-import org.springframework.core.env.Environment;
-import org.springframework.core.env.Profiles;
-import org.springframework.data.web.ReactivePageableHandlerMethodArgumentResolver;
-import org.springframework.data.web.ReactiveSortHandlerMethodArgumentResolver;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.reactive.CorsWebFilter;
@@ -24,7 +20,6 @@ import org.zalando.problem.spring.webflux.advice.ProblemExceptionHandler;
 import org.zalando.problem.spring.webflux.advice.ProblemHandling;
 import tech.jhipster.config.JHipsterConstants;
 import tech.jhipster.config.JHipsterProperties;
-import tech.jhipster.config.h2.H2ConfigurationHelper;
 import tech.jhipster.web.filter.reactive.CachingHttpHeadersFilter;
 
 /**
@@ -37,16 +32,8 @@ public class WebConfigurer implements WebFluxConfigurer {
 
     private final JHipsterProperties jHipsterProperties;
 
-    public WebConfigurer(Environment env, JHipsterProperties jHipsterProperties) {
+    public WebConfigurer(JHipsterProperties jHipsterProperties) {
         this.jHipsterProperties = jHipsterProperties;
-        if (env.acceptsProfiles(Profiles.of(JHipsterConstants.SPRING_PROFILE_DEVELOPMENT))) {
-            try {
-                H2ConfigurationHelper.initH2Console();
-            } catch (Exception e) {
-                // Console may already be running on another app or after a refresh.
-                e.printStackTrace();
-            }
-        }
     }
 
     @Bean
@@ -64,18 +51,6 @@ public class WebConfigurer implements WebFluxConfigurer {
             source.registerCorsConfiguration("/*/management/**", config);
         }
         return new CorsWebFilter(source);
-    }
-
-    // TODO: remove when this is supported in spring-boot
-    @Bean
-    HandlerMethodArgumentResolver reactivePageableHandlerMethodArgumentResolver() {
-        return new ReactivePageableHandlerMethodArgumentResolver();
-    }
-
-    // TODO: remove when this is supported in spring-boot
-    @Bean
-    HandlerMethodArgumentResolver reactiveSortHandlerMethodArgumentResolver() {
-        return new ReactiveSortHandlerMethodArgumentResolver();
     }
 
     @Bean

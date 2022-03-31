@@ -52,7 +52,6 @@ management:
             'loggers',
             'prometheus',
             'threaddump',
-            'liquibase',
           ]
   endpoint:
     health:
@@ -64,7 +63,7 @@ management:
         liveness:
           include: livenessState
         readiness:
-          include: readinessState,db
+          include: readinessState
     jhimetrics:
       enabled: true
   info:

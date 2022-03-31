@@ -20,8 +20,7 @@
       "mail": "Email",
       "livenessState": "Liveness state",
       "readinessState": "Readiness state",
-      "ping": "Application",
-      "r2dbc": "Database"
+      "ping": "Application"
     },
     "table": {
       "service": "Service name",

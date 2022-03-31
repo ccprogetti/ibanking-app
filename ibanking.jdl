@@ -12,6 +12,7 @@ application {
    databaseType sql
    prodDatabaseType postgresql
    serviceDiscoveryType consul
+   databaseType no
 }
 entities Conto
 
