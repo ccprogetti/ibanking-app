@@ -1,0 +1,94 @@
+image: jhipster/jhipster:v7.7.0
+
+cache:
+  key: '$CI_COMMIT_REF_NAME'
+  paths:
+    - .maven/
+stages:
+  - check
+  - build
+  - test
+  - analyze
+  - package
+  - release
+  - deploy
+before_script:
+  - export MAVEN_USER_HOME=`pwd`/.maven
+
+nohttp:
+  stage: check
+  script:
+    - ./mvnw -ntp checkstyle:check -Dmaven.repo.local=$MAVEN_USER_HOME
+
+# dependency-scanning:
+#   stage: check
+#   script:
+#     - curl -Lo ./snyk $(curl -s https://api.github.com/repos/snyk/snyk/releases/latest | grep "browser_download_url.*snyk-linux" | cut -d ':' -f 2,3 | tr -d \" | tr -d ' ')
+#     - chmod +x snyk
+#     - ./snyk test --all-projects
+#     - ./snyk monitor --all-projects
+#   allow_failure: true
+
+maven-compile:
+  stage: build
+  script:
+    - ./mvnw -ntp compile -P-webapp -Dmaven.repo.local=$MAVEN_USER_HOME
+  artifacts:
+    paths:
+      - target/classes/
+      - target/generated-sources/
+    expire_in: 1 day
+
+maven-test:
+  # DinD service is required for Testcontainers
+  services:
+    - docker:dind
+
+  variables:
+    # Instruct Testcontainers to use the daemon of DinD.
+    DOCKER_HOST: 'tcp://docker:2375'
+    # Improve performance with overlayfs.
+    DOCKER_DRIVER: overlay2
+
+  stage: test
+  script:
+    - ./mvnw -ntp verify -P-webapp -Dmaven.repo.local=$MAVEN_USER_HOME -Dspring.profiles.active=testcontainers
+  artifacts:
+    reports:
+      junit:
+        - target/surefire-reports/TEST-*.xml
+        - target/failsafe-reports/TEST-*.xml
+    paths:
+      - target/surefire-reports
+      - target/failsafe-reports
+      - target/site
+    expire_in: 1 day
+
+sonar-analyze:
+  stage: analyze
+  dependencies:
+    - maven-test
+  script:
+    - ./mvnw -ntp org.jacoco:jacoco-maven-plugin:prepare-agent initialize sonar:sonar -Dsonar.organization=addvalue -Dsonar.host.url=https://sonar.addvalue.it -Dsonar.login=$SONAR_TOKEN -Dmaven.repo.local=$MAVEN_USER_HOME
+  allow_failure: true
+
+maven-package:
+  stage: package
+  script:
+    - ./mvnw -ntp verify deploy -Pprod -DskipTests -Dmaven.repo.local=$MAVEN_USER_HOME
+  artifacts:
+    paths:
+      - target/*.jar
+      - target/classes
+    expire_in: 1 day
+# Uncomment the following line to use gitlabs container registry. You need to adapt the REGISTRY_URL in case you are not using gitlab.com
+#docker-push:
+#    stage: release
+#    variables:
+#        REGISTRY_URL: registry.gitlab.com
+#        IMAGE_TAG: $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG-$CI_COMMIT_SHA
+#    dependencies:
+#        - maven-package
+#    script:
+#        - ./mvnw -ntp jib:build -Pprod -Djib.to.image=$IMAGE_TAG -Djib.to.auth.username=gitlab-ci-token  -Djib.to.auth.password=$CI_BUILD_TOKEN -Dmaven.repo.local=$MAVEN_USER_HOME
+

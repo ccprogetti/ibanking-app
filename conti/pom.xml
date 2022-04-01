@@ -20,6 +20,16 @@
         <!-- jhipster-needle-maven-plugin-repository -->
     </pluginRepositories>
 
+    <distributionManagement>
+        <snapshotRepository>
+            <id>private-snapshots</id>
+            <url>https://artifactory.addvalue.it/artifactory/libs-snapshot</url>
+        </snapshotRepository>
+        <repository>
+            <id>libs-release</id>
+            <url>https://artifactory.addvalue.it/artifactory/libs-release</url>
+        </repository>
+    </distributionManagement>
     <!-- jhipster-needle-distribution-management -->
 
     <properties>
