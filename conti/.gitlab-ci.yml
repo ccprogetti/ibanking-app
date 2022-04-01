@@ -69,7 +69,7 @@ sonar-analyze:
   dependencies:
     - maven-test
   script:
-    - ./mvnw -ntp org.jacoco:jacoco-maven-plugin:prepare-agent initialize sonar:sonar -Dsonar.organization=addvalue -Dsonar.host.url=https://sonar.addvalue.it -Dsonar.login=$SONAR_TOKEN -Dmaven.repo.local=$MAVEN_USER_HOME
+    - ./mvnw -ntp org.jacoco:jacoco-maven-plugin:prepare-agent initialize sonar:sonar -Dsonar.organization=addvalue -Dsonar.host.url=https://sonar.addvalue.it -Dsonar.login=474a39e4ac4aaae81ca4f7b15db07ebe6d4e4ec2 -Dmaven.repo.local=$MAVEN_USER_HOME
   allow_failure: true
 
 maven-package:
