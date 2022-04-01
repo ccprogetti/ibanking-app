@@ -5,6 +5,7 @@
     "applications": {
       "conti": {
         "applicationIndex": 1,
+        "clientFramework": "angularX",
         "serverPort": "8081"
       }
     },
@@ -13,14 +14,14 @@
     "blueprints": [],
     "buildTool": "maven",
     "cacheProvider": "no",
-    "clientFramework": "react",
+    "clientFramework": "angularX",
     "clientPackageManager": "npm",
     "clientTheme": "none",
     "clientThemeVariant": "",
-    "creationTimestamp": 1648743171549,
+    "creationTimestamp": 1648754656539,
     "databaseType": "no",
     "devDatabaseType": "no",
-    "devServerPort": 9060,
+    "devServerPort": 4200,
     "dtoSuffix": "DTO",
     "enableGradleEnterprise": false,
     "enableHibernateCache": false,
@@ -31,8 +32,9 @@
     "gradleEnterpriseHost": "",
     "jhiPrefix": "jhi",
     "jhipsterVersion": "7.7.0",
-    "jwtSecretKey": "ZjNjOTYwZDFmZjBiYWYzODU5M2E0ZTQ0ZTAzMWI1Mjg1YWU5ZGJmZmU3ZGFjMWE5MmVkZGE0YWZkMzZmMDMwMDU4ZDBhMmQ4MWE1ODYzNDE2YjZhMmJkZmU5MmMwYzhlMDY2OWNlNjY5Y2ZmOWQxNzZiNTNiZGIzN2ZiN2UzYjc=",
+    "jwtSecretKey": "M2MzZGJmYmIzYjgyMTM0NTc0NjE2ODU2M2ZkZTQzMzk0YWE3MDI0NmFjOWRiNjU4NDFjYTFmYTE1OGVmZTI4Njc1ZDFhNzhkZDYxYzhkZjZjZGRhOTg5YTVhYzE3N2M2MmMyNzI2MzFhOTcyZDhkODAyNTVkNTE4ZmU3MzcxN2M=",
     "languages": ["en"],
+    "lastLiquibaseTimestamp": 1648754716000,
     "messageBroker": false,
     "monorepository": true,
     "nativeLanguage": "en",

@@ -5,7 +5,7 @@
 application {
   config {
    baseName gateway
-   clientFramework  react
+   clientFramework  angularX
    applicationType gateway
    packageName it.addvalue.ibanking.gateway
    authenticationType oauth2
@@ -22,6 +22,7 @@ application {
   config {
     baseName conti
     packageName it.addvalue.ibanking.conti
+    clientFramework  angularX
     applicationType microservice
     authenticationType oauth2
     prodDatabaseType postgresql
