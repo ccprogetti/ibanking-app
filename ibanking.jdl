@@ -1,0 +1,46 @@
+/**
+ * The application configuration.
+ * @author A true hipster
+ */
+application {
+  config {
+   baseName gateway
+   clientFramework  react
+   applicationType gateway
+   packageName it.addvalue.ibanking.gateway
+   authenticationType oauth2
+   databaseType sql
+   prodDatabaseType postgresql
+   serviceDiscoveryType consul
+   databaseType no
+}
+entities Conto
+
+}
+
+application {
+  config {
+    baseName conti
+    packageName it.addvalue.ibanking.conti
+    applicationType microservice
+    authenticationType oauth2
+    prodDatabaseType postgresql
+    serverPort 8081
+    serviceDiscoveryType consul
+  }
+  entities Conto
+}
+
+entity Conto {
+  nome String required
+  iban String minlength(6)
+  userName String required
+  abi String required
+}
+
+
+filter * 
+
+paginate * with pagination
+
+microservice Conto  with conti

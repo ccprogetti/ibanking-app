@@ -1,0 +1,211 @@
+package it.addvalue.ibanking.conti.web.rest;
+
+import it.addvalue.ibanking.conti.domain.Conto;
+import it.addvalue.ibanking.conti.repository.ContoRepository;
+import it.addvalue.ibanking.conti.security.SecurityUtils;
+import it.addvalue.ibanking.conti.service.ContoQueryService;
+import it.addvalue.ibanking.conti.service.ContoService;
+import it.addvalue.ibanking.conti.service.criteria.ContoCriteria;
+import it.addvalue.ibanking.conti.web.rest.errors.BadRequestAlertException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+import tech.jhipster.web.util.HeaderUtil;
+import tech.jhipster.web.util.PaginationUtil;
+import tech.jhipster.web.util.ResponseUtil;
+
+/**
+ * REST controller for managing {@link it.addvalue.ibanking.conti.domain.Conto}.
+ */
+@RestController
+@RequestMapping("/api")
+public class ContoResource {
+
+    private final Logger log = LoggerFactory.getLogger(ContoResource.class);
+
+    private static final String ENTITY_NAME = "contiConto";
+
+    @Value("${jhipster.clientApp.name}")
+    private String applicationName;
+
+    private final ContoService contoService;
+
+    private final ContoRepository contoRepository;
+
+    private final ContoQueryService contoQueryService;
+
+    public ContoResource(ContoService contoService, ContoRepository contoRepository, ContoQueryService contoQueryService) {
+        this.contoService = contoService;
+        this.contoRepository = contoRepository;
+        this.contoQueryService = contoQueryService;
+    }
+
+    /**
+     * {@code POST  /contos} : Create a new conto.
+     *
+     * @param conto the conto to create.
+     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new conto, or with status {@code 400 (Bad Request)} if the conto has already an ID.
+     * @throws URISyntaxException if the Location URI syntax is incorrect.
+     */
+    @PostMapping("/contos")
+    public ResponseEntity<Conto> createConto(@Valid @RequestBody Conto conto) throws URISyntaxException {
+        log.debug("REST request to save Conto : {}", conto);
+        if (conto.getId() != null) {
+            throw new BadRequestAlertException("A new conto cannot already have an ID", ENTITY_NAME, "idexists");
+        }
+        Conto result = contoService.save(conto);
+        return ResponseEntity
+            .created(new URI("/api/contos/" + result.getId()))
+            .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
+            .body(result);
+    }
+
+    /**
+     * {@code PUT  /contos/:id} : Updates an existing conto.
+     *
+     * @param id the id of the conto to save.
+     * @param conto the conto to update.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated conto,
+     * or with status {@code 400 (Bad Request)} if the conto is not valid,
+     * or with status {@code 500 (Internal Server Error)} if the conto couldn't be updated.
+     * @throws URISyntaxException if the Location URI syntax is incorrect.
+     */
+    @PutMapping("/contos/{id}")
+    public ResponseEntity<Conto> updateConto(@PathVariable(value = "id", required = false) final Long id, @Valid @RequestBody Conto conto)
+        throws URISyntaxException {
+        log.debug("REST request to update Conto : {}, {}", id, conto);
+        if (conto.getId() == null) {
+            throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
+        }
+        if (!Objects.equals(id, conto.getId())) {
+            throw new BadRequestAlertException("Invalid ID", ENTITY_NAME, "idinvalid");
+        }
+
+        if (!contoRepository.existsById(id)) {
+            throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
+        }
+
+        Conto result = contoService.save(conto);
+        return ResponseEntity
+            .ok()
+            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, conto.getId().toString()))
+            .body(result);
+    }
+
+    /**
+     * {@code PATCH  /contos/:id} : Partial updates given fields of an existing conto, field will ignore if it is null
+     *
+     * @param id the id of the conto to save.
+     * @param conto the conto to update.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated conto,
+     * or with status {@code 400 (Bad Request)} if the conto is not valid,
+     * or with status {@code 404 (Not Found)} if the conto is not found,
+     * or with status {@code 500 (Internal Server Error)} if the conto couldn't be updated.
+     * @throws URISyntaxException if the Location URI syntax is incorrect.
+     */
+    @PatchMapping(value = "/contos/{id}", consumes = { "application/json", "application/merge-patch+json" })
+    public ResponseEntity<Conto> partialUpdateConto(
+        @PathVariable(value = "id", required = false) final Long id,
+        @NotNull @RequestBody Conto conto
+    ) throws URISyntaxException {
+        log.debug("REST request to partial update Conto partially : {}, {}", id, conto);
+        if (conto.getId() == null) {
+            throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
+        }
+        if (!Objects.equals(id, conto.getId())) {
+            throw new BadRequestAlertException("Invalid ID", ENTITY_NAME, "idinvalid");
+        }
+
+        if (!contoRepository.existsById(id)) {
+            throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
+        }
+
+        Optional<Conto> result = contoService.partialUpdate(conto);
+
+        return ResponseUtil.wrapOrNotFound(
+            result,
+            HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, conto.getId().toString())
+        );
+    }
+
+    /**
+     * {@code GET  /contos} : get all the contos.
+     *
+     * @param pageable the pagination information.
+     * @param criteria the criteria which the requested entities should match.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of contos in body.
+     */
+    @GetMapping("/contos")
+    public ResponseEntity<List<Conto>> getAllContos(
+        ContoCriteria criteria,
+        @org.springdoc.api.annotations.ParameterObject Pageable pageable
+    ) {
+        log.debug("REST request to get Contos by criteria: {}", criteria);
+
+        String userName = SecurityUtils.getCurrentUserLogin().get();
+        log.debug("Filter for username: {}", userName);
+        criteria.userName().setEquals(userName);
+                
+        Page<Conto> page = contoQueryService.findByCriteria(criteria, pageable);
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
+        return ResponseEntity.ok().headers(headers).body(page.getContent());
+    }
+
+    /**
+     * {@code GET  /contos/count} : count all the contos.
+     *
+     * @param criteria the criteria which the requested entities should match.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the count in body.
+     */
+    @GetMapping("/contos/count")
+    public ResponseEntity<Long> countContos(ContoCriteria criteria, JwtAuthenticationToken token) {
+        log.debug("REST request to count Contos by criteria: {}", criteria);
+
+        log.debug("REST request to count Contos with claim sid: {}", token.getToken().getClaimAsString("sid"));
+        
+        return ResponseEntity.ok().body(contoQueryService.countByCriteria(criteria));
+    }
+
+    /**
+     * {@code GET  /contos/:id} : get the "id" conto.
+     *
+     * @param id the id of the conto to retrieve.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the conto, or with status {@code 404 (Not Found)}.
+     */
+    @GetMapping("/contos/{id}")
+    public ResponseEntity<Conto> getConto(@PathVariable Long id) {
+        log.debug("REST request to get Conto : {}", id);
+        Optional<Conto> conto = contoService.findOne(id);
+        return ResponseUtil.wrapOrNotFound(conto);
+    }
+
+    /**
+     * {@code DELETE  /contos/:id} : delete the "id" conto.
+     *
+     * @param id the id of the conto to delete.
+     * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
+     */
+    @DeleteMapping("/contos/{id}")
+    public ResponseEntity<Void> deleteConto(@PathVariable Long id) {
+        log.debug("REST request to delete Conto : {}", id);
+        contoService.delete(id);
+        return ResponseEntity
+            .noContent()
+            .headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString()))
+            .build();
+    }
+}
