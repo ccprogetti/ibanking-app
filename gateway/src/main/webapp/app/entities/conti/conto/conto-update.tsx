@@ -4,21 +4,22 @@ import { Button, Row, Col, FormText } from 'reactstrap';
 import { isNumber, Translate, translate, ValidatedField, ValidatedForm } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-import { getEntity, updateEntity, createEntity, reset } from './conto.reducer';
-import { IConto } from 'app/shared/model/conti/conto.model';
 import { convertDateTimeFromServer, convertDateTimeToServer, displayDefaultDateTime } from 'app/shared/util/date-utils';
 import { mapIdList } from 'app/shared/util/entity-utils';
 import { useAppDispatch, useAppSelector } from 'app/config/store';
+
+import { IConto } from 'app/shared/model/conti/conto.model';
+import { getEntity, updateEntity, createEntity, reset } from './conto.reducer';
 
 export const ContoUpdate = (props: RouteComponentProps<{ id: string }>) => {
   const dispatch = useAppDispatch();
 
   const [isNew] = useState(!props.match.params || !props.match.params.id);
 
-  const contoEntity = useAppSelector(state => state.conto.entity);
-  const loading = useAppSelector(state => state.conto.loading);
-  const updating = useAppSelector(state => state.conto.updating);
-  const updateSuccess = useAppSelector(state => state.conto.updateSuccess);
+  const contoEntity = useAppSelector(state => state.gateway.conto.entity);
+  const loading = useAppSelector(state => state.gateway.conto.loading);
+  const updating = useAppSelector(state => state.gateway.conto.updating);
+  const updateSuccess = useAppSelector(state => state.gateway.conto.updateSuccess);
   const handleClose = () => {
     props.history.push('/conto' + props.location.search);
   };

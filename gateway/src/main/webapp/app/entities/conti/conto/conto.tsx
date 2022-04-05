@@ -4,12 +4,13 @@ import { Button, Table } from 'reactstrap';
 import { Translate, getSortState, JhiPagination, JhiItemCount } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-import { getEntities } from './conto.reducer';
-import { IConto } from 'app/shared/model/conti/conto.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 import { ASC, DESC, ITEMS_PER_PAGE, SORT } from 'app/shared/util/pagination.constants';
 import { overridePaginationStateWithQueryParams } from 'app/shared/util/entity-utils';
 import { useAppDispatch, useAppSelector } from 'app/config/store';
+
+import { IConto } from 'app/shared/model/conti/conto.model';
+import { getEntities } from './conto.reducer';
 
 export const Conto = (props: RouteComponentProps<{ url: string }>) => {
   const dispatch = useAppDispatch();
@@ -18,9 +19,9 @@ export const Conto = (props: RouteComponentProps<{ url: string }>) => {
     overridePaginationStateWithQueryParams(getSortState(props.location, ITEMS_PER_PAGE, 'id'), props.location.search)
   );
 
-  const contoList = useAppSelector(state => state.conto.entities);
-  const loading = useAppSelector(state => state.conto.loading);
-  const totalItems = useAppSelector(state => state.conto.totalItems);
+  const contoList = useAppSelector(state => state.gateway.conto.entities);
+  const loading = useAppSelector(state => state.gateway.conto.loading);
+  const totalItems = useAppSelector(state => state.gateway.conto.totalItems);
 
   const getAllEntities = () => {
     dispatch(
@@ -88,7 +89,7 @@ export const Conto = (props: RouteComponentProps<{ url: string }>) => {
             <FontAwesomeIcon icon="sync" spin={loading} />{' '}
             <Translate contentKey="gatewayApp.contiConto.home.refreshListLabel">Refresh List</Translate>
           </Button>
-          <Link to={`${match.url}/new`} className="btn btn-primary jh-create-entity" id="jh-create-entity" data-cy="entityCreateButton">
+          <Link to="/conto/new" className="btn btn-primary jh-create-entity" id="jh-create-entity" data-cy="entityCreateButton">
             <FontAwesomeIcon icon="plus" />
             &nbsp;
             <Translate contentKey="gatewayApp.contiConto.home.createLabel">Create new Conto</Translate>
@@ -122,7 +123,7 @@ export const Conto = (props: RouteComponentProps<{ url: string }>) => {
               {contoList.map((conto, i) => (
                 <tr key={`entity-${i}`} data-cy="entityTable">
                   <td>
-                    <Button tag={Link} to={`${match.url}/${conto.id}`} color="link" size="sm">
+                    <Button tag={Link} to={`/conto/${conto.id}`} color="link" size="sm">
                       {conto.id}
                     </Button>
                   </td>
@@ -132,7 +133,7 @@ export const Conto = (props: RouteComponentProps<{ url: string }>) => {
                   <td>{conto.abi}</td>
                   <td className="text-end">
                     <div className="btn-group flex-btn-group-container">
-                      <Button tag={Link} to={`${match.url}/${conto.id}`} color="info" size="sm" data-cy="entityDetailsButton">
+                      <Button tag={Link} to={`/conto/${conto.id}`} color="info" size="sm" data-cy="entityDetailsButton">
                         <FontAwesomeIcon icon="eye" />{' '}
                         <span className="d-none d-md-inline">
                           <Translate contentKey="entity.action.view">View</Translate>
@@ -140,7 +141,7 @@ export const Conto = (props: RouteComponentProps<{ url: string }>) => {
                       </Button>
                       <Button
                         tag={Link}
-                        to={`${match.url}/${conto.id}/edit?page=${paginationState.activePage}&sort=${paginationState.sort},${paginationState.order}`}
+                        to={`/conto/${conto.id}/edit?page=${paginationState.activePage}&sort=${paginationState.sort},${paginationState.order}`}
                         color="primary"
                         size="sm"
                         data-cy="entityEditButton"
@@ -152,7 +153,7 @@ export const Conto = (props: RouteComponentProps<{ url: string }>) => {
                       </Button>
                       <Button
                         tag={Link}
-                        to={`${match.url}/${conto.id}/delete?page=${paginationState.activePage}&sort=${paginationState.sort},${paginationState.order}`}
+                        to={`/conto/${conto.id}/delete?page=${paginationState.activePage}&sort=${paginationState.sort},${paginationState.order}`}
                         color="danger"
                         size="sm"
                         data-cy="entityDeleteButton"
