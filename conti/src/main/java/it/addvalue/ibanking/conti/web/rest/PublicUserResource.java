@@ -1,7 +1,6 @@
 package it.addvalue.ibanking.conti.web.rest;
 
 import it.addvalue.ibanking.conti.service.UserService;
-import it.addvalue.ibanking.conti.service.dto.AdminUserDTO;
 import it.addvalue.ibanking.conti.service.dto.UserDTO;
 import java.util.*;
 import org.slf4j.Logger;
@@ -11,7 +10,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AbstractAuthenticationToken;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import tech.jhipster.web.util.PaginationUtil;
@@ -35,13 +33,8 @@ public class PublicUserResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body all users.
      */
     @GetMapping("/users")
-    public ResponseEntity<List<UserDTO>> getAllPublicUsers(@org.springdoc.api.annotations.ParameterObject Pageable pageable, AbstractAuthenticationToken authToken) {
+    public ResponseEntity<List<UserDTO>> getAllPublicUsers(@org.springdoc.api.annotations.ParameterObject Pageable pageable) {
         log.debug("REST request to get all public User names");
-
-        
-    AdminUserDTO userFromAuthentication = userService.getUserFromAuthentication(authToken);
-    log.debug(userFromAuthentication.getEmail());
-
 
         final Page<UserDTO> page = userService.getAllPublicUsers(pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);

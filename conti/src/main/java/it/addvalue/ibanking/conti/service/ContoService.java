@@ -37,6 +37,17 @@ public class ContoService {
     }
 
     /**
+     * Update a conto.
+     *
+     * @param conto the entity to save.
+     * @return the persisted entity.
+     */
+    public Conto update(Conto conto) {
+        log.debug("Request to save Conto : {}", conto);
+        return contoRepository.save(conto);
+    }
+
+    /**
      * Partially update a conto.
      *
      * @param conto the entity to update partially.
