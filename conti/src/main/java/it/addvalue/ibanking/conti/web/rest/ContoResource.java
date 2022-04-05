@@ -2,7 +2,6 @@ package it.addvalue.ibanking.conti.web.rest;
 
 import it.addvalue.ibanking.conti.domain.Conto;
 import it.addvalue.ibanking.conti.repository.ContoRepository;
-import it.addvalue.ibanking.conti.security.SecurityUtils;
 import it.addvalue.ibanking.conti.service.ContoQueryService;
 import it.addvalue.ibanking.conti.service.ContoService;
 import it.addvalue.ibanking.conti.service.criteria.ContoCriteria;
@@ -21,7 +20,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import tech.jhipster.web.util.HeaderUtil;
@@ -99,7 +97,7 @@ public class ContoResource {
             throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
         }
 
-        Conto result = contoService.save(conto);
+        Conto result = contoService.update(conto);
         return ResponseEntity
             .ok()
             .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, conto.getId().toString()))
@@ -155,11 +153,6 @@ public class ContoResource {
         @org.springdoc.api.annotations.ParameterObject Pageable pageable
     ) {
         log.debug("REST request to get Contos by criteria: {}", criteria);
-
-        String userName = SecurityUtils.getCurrentUserLogin().get();
-        log.debug("Filter for username: {}", userName);
-        criteria.userName().setEquals(userName);
-                
         Page<Conto> page = contoQueryService.findByCriteria(criteria, pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return ResponseEntity.ok().headers(headers).body(page.getContent());
@@ -172,11 +165,8 @@ public class ContoResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the count in body.
      */
     @GetMapping("/contos/count")
-    public ResponseEntity<Long> countContos(ContoCriteria criteria, JwtAuthenticationToken token) {
+    public ResponseEntity<Long> countContos(ContoCriteria criteria) {
         log.debug("REST request to count Contos by criteria: {}", criteria);
-
-        log.debug("REST request to count Contos with claim sid: {}", token.getToken().getClaimAsString("sid"));
-        
         return ResponseEntity.ok().body(contoQueryService.countByCriteria(criteria));
     }
 

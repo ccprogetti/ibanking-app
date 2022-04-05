@@ -27,6 +27,7 @@ spring:
       config:
         enabled: false
       enabled: false
+
   datasource:
     type: com.zaxxer.hikari.HikariDataSource
     url: jdbc:h2:mem:conti;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
@@ -61,7 +62,6 @@ spring:
     host: localhost
   main:
     allow-bean-definition-overriding: true
-    allow-circular-references: true
   mvc:
     pathmatch:
       matching-strategy: ant_path_matcher
@@ -77,7 +77,7 @@ spring:
     scheduling:
       thread-name-prefix: conti-scheduling-
       pool:
-        size: 1
+        size: 20
   thymeleaf:
     mode: HTML
   # Allow SecurityConfiguration to initialize w/o specifying an empty issuer-uri is OK
@@ -97,7 +97,6 @@ server:
 #
 # Full reference is available at: https://www.jhipster.tech/common-application-properties/
 # ===================================================================
-
 jhipster:
   clientApp:
     name: 'contiApp'

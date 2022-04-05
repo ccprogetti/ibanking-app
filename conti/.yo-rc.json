@@ -21,7 +21,7 @@
     "gatewayServerPort": "8080",
     "gradleEnterpriseHost": "",
     "jhiPrefix": "jhi",
-    "jhipsterVersion": "7.7.0",
+    "jhipsterVersion": "7.8.0",
     "jwtSecretKey": "M2I2NDEwMGE4ZjliOTJhMGUxNjc3ZWNhYWJkY2M3ZjMxN2JmNjE1MDdjNDZlMzZlNzVjMmNlMjVmNGZiNjkxY2E0OTJmYzBlZDlhNmU1NDE0ZTZjODEyMmFhYjdlMjYwNjY3YzhkNTk2ZDdlYWY5N2JjZmMzNWFkMzMxYjFiNTk=",
     "languages": ["en"],
     "lastLiquibaseTimestamp": 1648645307000,
