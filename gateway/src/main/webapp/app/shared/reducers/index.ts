@@ -1,3 +1,4 @@
+import { ReducersMapObject, combineReducers } from '@reduxjs/toolkit';
 import { loadingBarReducer as loadingBar } from 'react-redux-loading-bar';
 
 import locale from './locale';
@@ -6,19 +7,16 @@ import applicationProfile from './application-profile';
 
 import administration from 'app/modules/administration/administration.reducer';
 import userManagement from './user-management';
-// prettier-ignore
-import conto from 'app/entities/conti/conto/conto.reducer';
 /* jhipster-needle-add-reducer-import - JHipster will add reducer here */
 
-const rootReducer = {
+const rootReducer: ReducersMapObject = {
   authentication,
   locale,
   applicationProfile,
   administration,
   userManagement,
-  conto,
-  /* jhipster-needle-add-reducer-combine - JHipster will add reducer here */
   loadingBar,
+  /* jhipster-needle-add-reducer-combine - JHipster will add reducer here */
 };
 
 export default rootReducer;

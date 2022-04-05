@@ -16,8 +16,8 @@ export const ContoDeleteDialog = (props: RouteComponentProps<{ id: string }>) =>
     setLoadModal(true);
   }, []);
 
-  const contoEntity = useAppSelector(state => state.conto.entity);
-  const updateSuccess = useAppSelector(state => state.conto.updateSuccess);
+  const contoEntity = useAppSelector(state => state.gateway.conto.entity);
+  const updateSuccess = useAppSelector(state => state.gateway.conto.updateSuccess);
 
   const handleClose = () => {
     props.history.push('/conto' + props.location.search);
