@@ -10,6 +10,7 @@ import PrivateRoute from 'app/shared/auth/private-route';
 import ErrorBoundaryRoute from 'app/shared/error/error-boundary-route';
 import PageNotFound from 'app/shared/error/page-not-found';
 import { AUTHORITIES } from 'app/config/constants';
+import Login from './modules/login/login';
 
 const loading = <div>loading ...</div>;
 
@@ -25,6 +26,7 @@ const Routes = () => {
         <ErrorBoundaryRoute path="/logout" component={Logout} />
         <PrivateRoute path="/admin" component={Admin} hasAnyAuthorities={[AUTHORITIES.ADMIN]} />
         <ErrorBoundaryRoute path="/" exact component={Home} />
+        <ErrorBoundaryRoute path="/login" component={Login} />
         <ErrorBoundaryRoute path="/oauth2/authorization/oidc" component={LoginRedirect} />
         <PrivateRoute path="/" component={EntitiesRoutes} hasAnyAuthorities={[AUTHORITIES.USER]} />
         <ErrorBoundaryRoute component={PageNotFound} />

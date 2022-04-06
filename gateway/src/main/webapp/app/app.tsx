@@ -8,7 +8,7 @@ import { BrowserRouter as Router } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
 
 import { useAppDispatch, useAppSelector } from 'app/config/store';
-import { getSession } from 'app/shared/reducers/authentication';
+import { getSession, getSessionFromOIDC } from 'app/shared/reducers/authentication';
 import { getProfile } from 'app/shared/reducers/application-profile';
 import { setLocale } from 'app/shared/reducers/locale';
 import Header from 'app/shared/layout/header/header';
@@ -17,20 +17,31 @@ import { hasAnyAuthority } from 'app/shared/auth/private-route';
 import ErrorBoundary from 'app/shared/error/error-boundary';
 import { AUTHORITIES } from 'app/config/constants';
 import AppRoutes from 'app/routes';
+import { useAuth } from 'react-oidc-context';
 
 const baseHref = document.querySelector('base').getAttribute('href').replace(/\/$/, '');
 
 export const App = () => {
   const dispatch = useAppDispatch();
+  const auth = useAuth();
+
+  
+  React.useEffect(() => {
+    // the `return` is important - addAccessTokenExpiring() returns a cleanup function
+    return auth.events.addUserSignedIn(() => {
+     // dispatch(getSessionFromOIDC());
+    })
+  }, [auth.events, dispatch(getSessionFromOIDC())])
+
 
   useEffect(() => {
-    dispatch(getSession());
+    dispatch(getSessionFromOIDC());
     dispatch(getProfile());
   }, []);
 
   const currentLocale = useAppSelector(state => state.locale.currentLocale);
   const isAuthenticated = useAppSelector(state => state.authentication.isAuthenticated);
-  const isAdmin = useAppSelector(state => hasAnyAuthority(state.authentication.account.authorities, [AUTHORITIES.ADMIN]));
+  const isAdmin = useAppSelector(state => hasAnyAuthority(state.authentication.account?.authorities, [AUTHORITIES.ADMIN]));
   const ribbonEnv = useAppSelector(state => state.applicationProfile.ribbonEnv);
   const isInProduction = useAppSelector(state => state.applicationProfile.inProduction);
   const isOpenAPIEnabled = useAppSelector(state => state.applicationProfile.isOpenAPIEnabled);

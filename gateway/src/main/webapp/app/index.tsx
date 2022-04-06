@@ -11,6 +11,17 @@ import ErrorBoundary from 'app/shared/error/error-boundary';
 import AppComponent from 'app/app';
 import { loadIcons } from 'app/config/icon-loader';
 
+import { AuthProvider } from "react-oidc-context";
+
+const oidcConfig = {
+  authority: "http://localhost:9080/auth/realms/jhipster",
+  client_id: "web_app",
+  redirect_uri: "http://localhost:9060/",
+  loadUserInfo: true
+  // ...
+};
+
+
 const store = getStore();
 registerLocale(store);
 
@@ -21,16 +32,19 @@ loadIcons();
 
 const rootEl = document.getElementById('root');
 
+
 const render = Component =>
   // eslint-disable-next-line react/no-render-return-value
   ReactDOM.render(
+    <AuthProvider {...oidcConfig}>
     <ErrorBoundary>
       <Provider store={store}>
         <div>
           <Component />
         </div>
       </Provider>
-    </ErrorBoundary>,
+    </ErrorBoundary>
+    </AuthProvider>,
     rootEl
   );
 
