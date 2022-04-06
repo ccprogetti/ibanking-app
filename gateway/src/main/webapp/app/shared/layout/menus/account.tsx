@@ -16,7 +16,7 @@ const accountMenuItemsAuthenticated = () => (
 
 const accountMenuItems = () => (
   <>
-    <DropdownItem id="login-item" tag="a" href={getLoginUrl()} data-cy="login">
+    <DropdownItem id="login-item" tag="a" to="/oauth2/authorization/oidc" data-cy="login">
       <FontAwesomeIcon icon="sign-in-alt" /> <Translate contentKey="global.menu.account.login">Sign in</Translate>
     </DropdownItem>
   </>

@@ -6,6 +6,9 @@ import { serializeAxiosError } from './reducer.utils';
 import { AppThunk } from 'app/config/store';
 import { setLocale } from 'app/shared/reducers/locale';
 
+import { User } from 'oidc-client-ts';
+
+
 const AUTH_TOKEN_KEY = 'jhi-authenticationToken';
 
 export const initialState = {
@@ -53,12 +56,40 @@ export const authenticate = createAsyncThunk(
   }
 );
 
+export const authenticateKeycloak = createAsyncThunk(
+  'authentication/keycloak-login',
+   () =>{
+    const userStr = Storage.session.get("oidc.user:http://localhost:9080/auth/realms/jhipster:web_app");
+    if (userStr){
+      return  User.fromStorageString(JSON.stringify(userStr));
+    }else{ return null;}
+    },
+  {}
+);
+
+export const keycloakLogin: () => AppThunk =
+  () => 
+  async dispatch => {
+
+    const  result = await dispatch(authenticateKeycloak());    
+    const response = result.payload as User;    
+    const bearerToken = response?.access_token;
+    if (bearerToken){
+      Storage.session.set(AUTH_TOKEN_KEY, bearerToken);
+    }    
+    dispatch(getSession());
+  };
+
+
+
 export const login: (username: string, password: string, rememberMe?: boolean) => AppThunk =
   (username, password, rememberMe = false) =>
   async dispatch => {
-    const result = await dispatch(authenticate({ username, password, rememberMe }));
-    const response = result.payload as AxiosResponse;
+
+    const result = await dispatch(authenticate({ username, password, rememberMe }));    
+    const response = result.payload as AxiosResponse;    
     const bearerToken = response?.headers?.authorization;
+    
     if (bearerToken && bearerToken.slice(0, 7) === 'Bearer ') {
       const jwt = bearerToken.slice(7, bearerToken.length);
       if (rememberMe) {
@@ -147,6 +178,16 @@ export const AuthenticationSlice = createSlice({
           loading: false,
           sessionHasBeenFetched: true,
           account: action.payload.data,
+        };
+      })
+      .addCase(authenticateKeycloak.fulfilled, (state, action) => {
+        const isAuthenticated = action.payload?.expired;
+        return {
+          ...state,
+          isAuthenticated,
+          loading: false,
+          sessionHasBeenFetched: true,
+          account: action.payload,
         };
       })
       .addCase(authenticate.pending, state => {
