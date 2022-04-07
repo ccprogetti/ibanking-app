@@ -36,7 +36,7 @@ export const PrivateRouteComponent = ({ component: Component, hasAnyAuthorities 
       ) : (
         <Redirect
           to={{
-            pathname: '/oauth2/authorization/oidc',
+            pathname: '/',
             search: props.location.search,
             state: { from: props.location },
           }}
