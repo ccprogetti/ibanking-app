@@ -35,7 +35,7 @@ export const App = () => {
 
 
   useEffect(() => {
-    dispatch(getSessionFromOIDC());
+    // dispatch(getSessionFromOIDC());
     dispatch(getProfile());
   }, []);
 

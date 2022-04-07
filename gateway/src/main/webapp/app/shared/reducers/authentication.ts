@@ -47,26 +47,23 @@ export const getSession = (): AppThunk => async (dispatch, getState) => {
 
 
 export const getSessionFromOIDC: () => AppThunk =
-  () => 
-  async dispatch => {
-
-    const  result = await dispatch(getAccountFromOIDC());    
-    const response = result.payload as User;    
-    const bearerToken = response?.access_token;
-    if (bearerToken){
-      Storage.session.set(AUTH_TOKEN_KEY, bearerToken);
-    }   
-  };
+  () =>
+    async dispatch => {
+      const result = await dispatch(getAccountFromOIDC());
+    };
 
 export const getAccountFromOIDC = createAsyncThunk('authentication/get_account_from_oidc',
   () => {
     const userStr = Storage.session.get("oidc.user:http://localhost:9080/auth/realms/jhipster:web_app");
     if (userStr) {
+      const bearerToken = userStr.access_token;
+      if (bearerToken) {
+        Storage.session.set(AUTH_TOKEN_KEY, bearerToken);
+      }
+      const userOidc = User.fromStorageString(JSON.stringify(userStr));
+      userOidc.profile.authorities = userOidc.profile.roles;
+      return userOidc.profile;
 
-     const userOidc = User.fromStorageString(JSON.stringify(userStr));
-     userOidc.profile.authorities = userOidc.profile.roles;
-    return userOidc.profile;
-    
     } else { return null; }
   },
   {}
@@ -80,11 +77,11 @@ export const logoutServer = createAsyncThunk('authentication/logout', async () =
   serializeError: serializeAxiosError,
 });
 
-export const logoutServerOIDC = createAsyncThunk('authentication/logout-oidc', () => null , {
-  
+export const logoutServerOIDC = createAsyncThunk('authentication/logout-oidc', () => null, {
+
 });
 
-export const logout: () => AppThunk = () =>  dispatch => {
+export const logout: () => AppThunk = () => dispatch => {
   // await dispatch(logoutServer());
   // fetch new csrf token
   dispatch(getSession());
@@ -143,7 +140,7 @@ export const AuthenticationSlice = createSlice({
         state.loading = true;
       })
       .addCase(getAccountFromOIDC.fulfilled, (state, action) => {
-        const isAuthenticated = action.payload ? true: false;
+        const isAuthenticated = action.payload ? true : false;
         return {
           ...state,
           isAuthenticated,

@@ -1,10 +1,11 @@
 import React from 'react';
 import MenuItem from 'app/shared/layout/menus/menu-item';
-import { DropdownItem } from 'reactstrap';
+import { ButtonDropdown, DropdownItem, DropdownMenu, DropdownToggle } from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Translate, translate } from 'react-jhipster';
 import { getLoginUrl } from 'app/shared/util/url-utils';
 import { NavDropdown } from './menu-components';
+import { useAuth } from 'react-oidc-context';
 
 const accountMenuItemsAuthenticated = () => (
   <>
@@ -22,10 +23,28 @@ const accountMenuItems = () => (
   </>
 );
 
-export const AccountMenu = ({ isAuthenticated = false }) => (
-  <NavDropdown icon="user" name={translate('global.menu.account.main')} id="account-menu" data-cy="accountMenu">
-    {isAuthenticated ? accountMenuItemsAuthenticated() : accountMenuItems()}
-  </NavDropdown>
-);
+export const AccountMenu = ({ isAuthenticated = false }) =>{   
+
+  const auth = useAuth();
+  // ButtonDropdown open state
+  const [dropdownOpen, setOpen] = React.useState(false);
+  
+  return (
+  <ButtonDropdown  toggle={() => { setOpen(!dropdownOpen) }} isOpen={dropdownOpen}>
+        <DropdownToggle caret>
+        {translate('global.menu.account.main')}
+        </DropdownToggle>
+        <DropdownMenu>
+        <DropdownItem hidden={auth.isAuthenticated} onClick={() => {auth.signinRedirect();}}>Login</DropdownItem> 
+        <DropdownItem hidden={!auth.isAuthenticated} onClick={() => {auth.removeUser();}}>Logout</DropdownItem>          
+        </DropdownMenu>
+      </ButtonDropdown>);  
+  
+  
+  // <NavDropdown icon="user" name={translate('global.menu.account.main')} id="account-menu" data-cy="accountMenu">
+  //   {isAuthenticated ? accountMenuItemsAuthenticated() : accountMenuItems()}
+
+  // </NavDropdown>
+};
 
 export default AccountMenu;
