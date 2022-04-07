@@ -17,7 +17,8 @@ const oidcConfig = {
   authority: "http://localhost:9080/auth/realms/jhipster",
   client_id: "web_app",
   redirect_uri: "http://localhost:9060/",
-  loadUserInfo: true
+  loadUserInfo: true ,
+  post_logout_redirect_uri: "http://localhost:9060/"
   // ...
 };
 

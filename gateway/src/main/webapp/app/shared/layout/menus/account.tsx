@@ -36,7 +36,7 @@ export const AccountMenu = ({ isAuthenticated = false }) =>{
         </DropdownToggle>
         <DropdownMenu>
         <DropdownItem hidden={auth.isAuthenticated} onClick={() => {auth.signinRedirect();}}>Login</DropdownItem> 
-        <DropdownItem hidden={!auth.isAuthenticated} onClick={() => {auth.removeUser();}}>Logout</DropdownItem>          
+        <DropdownItem hidden={!auth.isAuthenticated} onClick={() => {auth.signoutRedirect();}}>Logout</DropdownItem>          
         </DropdownMenu>
       </ButtonDropdown>);  
   
