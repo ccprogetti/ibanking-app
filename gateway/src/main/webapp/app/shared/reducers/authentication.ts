@@ -35,17 +35,6 @@ export const getSession = (): AppThunk => async (dispatch, getState) => {
 };
 
 
-// export const getSessionFromOIDC = (): AppThunk => async (dispatch, getState) => {
-//   await dispatch(getAccountFromOIDC());
-
-//   const { account } = getState().authentication;
-//   if (account && account.langKey) {
-//     const langKey = Storage.session.get('locale', account.langKey);
-//     dispatch(setLocale(langKey));
-//   }
-// };
-
-
 export const getSessionFromOIDC: () => AppThunk =
   () =>
     async dispatch => {
